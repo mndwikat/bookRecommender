@@ -1,0 +1,1 @@
+# Tokenize already existing DB and function for calling OpenAI API
