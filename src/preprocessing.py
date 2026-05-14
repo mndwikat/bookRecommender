@@ -24,8 +24,8 @@ If the query is vague or refers to a series, include information about the most 
 
 
 def clean_text(user_input):
-    text = text.lower()
-    text = re.sub(r'[^a-z\s]', '', user_input)
+    text = user_input.lower()
+    text = re.sub(r'[^a-z\s]', '', text)
     return text
 
 def call_openai(prompt):
