@@ -38,7 +38,7 @@ def tokenize_text(text):
     tokens = [token for token in text.split() if token.strip()]
     return tokens
 
-#---------------------------------Concatinating---------------------------
+# Concatinating
 
 df['text'] = (
     df['title'] + ' ' +
