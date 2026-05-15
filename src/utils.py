@@ -31,10 +31,19 @@ def tokenize_text(text):
 def create_tokenized_DB():
     
     # loading dataframe
-    df = pd.read_csv("C:\\Users\\Marah\\Desktop\\DATATHON\\bookRecommender\\data\\books.csv", delimiter=',')
+    df = pd.read_csv("data/books.csv", delimiter=',')
     
     # rows to keep for tokenization
     df = df[['title', 'authors', 'categories', 'description', 'published_year', 'average_rating','num_pages', 'ratings_count']]
+    
+    # fill na places
+    df[['title', 'authors', 'categories', 'description']] = (
+        df[['title', 'authors', 'categories', 'description']].fillna('')
+    )
+    
+    df[['published_year', 'average_rating', 'num_pages', 'ratings_count']] = (
+        df[['published_year', 'average_rating', 'num_pages', 'ratings_count']].fillna(0)
+    )
     
     df['text'] = (
         df['title'] + ' ' +
@@ -53,5 +62,9 @@ def create_tokenized_DB():
     df['tokens'] = df['text'].apply(tokenize_text)
     
     return df
+
+df = create_tokenized_DB()
+
+print(df)
 
 
