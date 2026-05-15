@@ -5,18 +5,6 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-df = pd.read_csv("C:\\Users\\Marah\\Desktop\\DATATHON\\bookRecommender\\data\\books.csv", delimiter=',')
-
-#print(df.shape)
-#print(df.columns)
-#df.head()
-
-df = df[['title', 'authors', 'categories', 'description', 'published_year', 'average_rating','num_pages', 'ratings_count']]
-# Fill NaN values with empty strings to avoid concatenation errors
-df = df.fillna('')
-print(f"Shape after filling NaN: {df.shape}")
-#df.head()
-
 #Text Cleaning
 def clean_text(text):
     text = text.lower()
@@ -38,24 +26,32 @@ def tokenize_text(text):
     tokens = [token for token in text.split() if token.strip()]
     return tokens
 
-# Concatinating
+# Concatenating
 
-df['text'] = (
-    df['title'] + ' ' +
-    df['authors'] + ' ' +
-    df['categories'] + ' ' +
-    df['description'] +' ' +
-    df['published_year'].astype(str) + ' ' +
-    df['average_rating'].astype(str) + ' ' +
-    df['num_pages'].astype(str) + ' ' +
-    df['ratings_count'].astype(str)
-)
+def create_tokenized_DB():
+    
+    # loading dataframe
+    df = pd.read_csv("C:\\Users\\Marah\\Desktop\\DATATHON\\bookRecommender\\data\\books.csv", delimiter=',')
+    
+    # rows to keep for tokenization
+    df = df[['title', 'authors', 'categories', 'description', 'published_year', 'average_rating','num_pages', 'ratings_count']]
+    
+    df['text'] = (
+        df['title'] + ' ' +
+        df['authors'] + ' ' +
+        df['categories'] + ' ' +
+        df['description'] +' ' +
+        df['published_year'].astype(str) + ' ' +
+        df['average_rating'].astype(str) + ' ' +
+        df['num_pages'].astype(str) + ' ' +
+        df['ratings_count'].astype(str)
+    )
 
-df['text'] = df['text'].apply(clean_text)
+    df['text'] = df['text'].apply(clean_text)
 
-# Apply tokenizer to cleaned text
-df['tokens'] = df['text'].apply(tokenize_text)
-
-df["text"]
+    # Apply tokenizer to cleaned text
+    df['tokens'] = df['text'].apply(tokenize_text)
+    
+    return df
 
 
