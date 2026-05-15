@@ -63,8 +63,9 @@ def create_tokenized_DB():
     
     return df
 
-df = create_tokenized_DB()
+# Debugging
+# df = create_tokenized_DB()
 
-print(df)
+# print(df)
 
 
