@@ -22,15 +22,11 @@ database_vectors = np.array([
 
 def find_similarities (vector, embeding, N_outputs):
     
-    similarity_score = np.array(cosine_similarity(vector.reshape(1, -1), embeding)) #Cosine similarity to rank vectors by similarity
+    similarity_score = cosine_similarity(vector.reshape(1, -1), embeding).flatten() #Cosine similarity to rank vectors by similarity
     
-    ranked_embeding = np.column_stack((embeding, similarity_score.T)) #Attach ranking to each vector in embedding
+    top_indices = similarity_score.argsort()[::-1][:N_outputs] #Organize ranking from higher to lowesr
 
-    sorted_rankings = ranked_embeding[ranked_embeding[:,-1].argsort()][::-1] #Organize the vectors in embedding from most similar to less similar based on ranking
-
-    top_N_rankings = sorted_rankings[:N_outputs] #Get the N number of vectors with the highest score
-
-    return(top_N_rankings[:,:-1]) #Return the N number of vectors but without the similarity ranking
+    return(embeding[top_indices]) #Return corresponding vectors to rankings
         
 
     
