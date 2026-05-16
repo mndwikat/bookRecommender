@@ -19,17 +19,18 @@ database_vectors = np.array([
 
 #Compares the similarties between a vector and an embedding of vectors, 
 # and outputs an N number of vectors with the highest similarity to the input vector
+#Uses threshold as a similarity strictness criteria, where 1 is identical
 
-def find_similarities (vector, embeding, N_outputs):
-    
+def find_similarities (vector, embeding, N_outputs, threshold):
     similarity_score = cosine_similarity(vector.reshape(1, -1), embeding).flatten() #Cosine similarity to rank vectors by similarity
     
-    top_indices = similarity_score.argsort()[::-1][:N_outputs] #Organize ranking from higher to lowesr
+    valid_score = similarity_score >= threshold #Accept only similarities higher than threshold
 
-    return(embeding[top_indices]) #Return corresponding vectors to rankings
-        
+    filtered_embedding = embeding[valid_score] #Apply threshold to embedding
+    filtered_score = similarity_score[valid_score] #apply threshold to score
 
-    
+    top_indices = filtered_score.argsort()[::-1][:N_outputs] #Organize ranking from higher to lower
+    return(filtered_embedding[top_indices]) #Return corresponding vectors to rankings
 
-print(find_similarities(user_prompt_vector, database_vectors, 3))
+print(find_similarities(user_prompt_vector, database_vectors, 3, 0.6))
 
