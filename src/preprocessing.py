@@ -92,6 +92,3 @@ def create_embedded_DB():
 
 # Create embedded database
 # create_embedded_DB()
-
-# load it later
-# embeddings = np.load("data/bert_embeddings.npy")

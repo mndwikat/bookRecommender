@@ -4,22 +4,32 @@
 import re 
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
 
-# Declaring global variables
+load_dotenv()
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+print(client)
+
 system_prompt = '''
-You are a book search query enhancer. Your job is to expand a user's book search query into a structured, information-rich description that will improve semantic matching against a book database.
+You are a book search query enhancer. Your task is to expand a user's raw search query into a dense, keyword-rich paragraph that mimics a real book catalog entry, optimized for semantic similarity matching.
 
-You will be given a user's raw search query. Based on your knowledge, expand it by inferring and adding the following fields:
-- Authors: Who wrote the book (full name)
-- Category: The genre or category (e.g. Fantasy, Science Fiction, Romance, Self-help)
-- Description: A brief description of the book's themes, plot, or content (2-3 sentences)
-- Published_year: The year the book was published
+Given the user's query, infer and include the following:
+- Authors: List 2-3 plausible author names who would write this type of book
+- Category: Pick the single most relevant category from this list:
+  Fiction, Juvenile Fiction, Biography & Autobiography, History, Literary Criticism, Philosophy, Comics & Graphic Novels,
+  Religion, Drama, Juvenile Nonfiction, Poetry, Literary Collections, Science, Business & Economics, Social Science,
+  Performing Arts, Cooking, Art, Body Mind & Spirit, Psychology, Travel, Computers, Self-Help, Political Science,
+  Family & Relationships, Language Arts & Disciplines, Health & Fitness, Humor, Children's stories, Education
+- Description: 2-3 sentences describing likely themes, plot, tone, and setting
+- Num_pages: A plausible page count for the category and type of book
 
-Return ONLY a plain text paragraph that naturally combines all of this information. Do not use JSON, bullet points, or labels. The output will be tokenized and compared against a database, so it must be dense with relevant keywords.
-
-If the query is vague or refers to a series, include information about the most well-known entry.
+Rules:
+- Return ONLY a single plain text paragraph, no labels, no JSON, no bullet points
+- Be as specific and keyword-dense as possible — the output is embedded for cosine similarity
+- If the query is vague, cast a wide net and include broad relevant terms for that genre
+- Mirror the vocabulary and structure of real book catalog entries
 '''
 
 # OpenAI API call
@@ -31,6 +41,10 @@ def call_openai(prompt):
             {"role": "user", "content": prompt}
         ]
     )
+    
+    # For debugging: output of gpt
+    # print(response.choices[0].message.content)
+    
     return response.choices[0].message.content
 
 # Configure prompt using user_input (call this function in the recommender pipeline!)
