@@ -10,8 +10,6 @@ load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-print(client)
-
 system_prompt = '''
 You are a book search query enhancer. Your task is to expand a user's raw search query into a dense, keyword-rich paragraph that mimics a real book catalog entry, optimized for semantic similarity matching.
 
