@@ -3,10 +3,10 @@
 import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
-from utils import enhance_text
 
 # import functions
 from preprocessing import get_embedding
+from utils import enhance_text
 
 # replace the return string with the actual prompt (fetching from frontend)
 def get_user_prompt():
